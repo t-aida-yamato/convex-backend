@@ -194,7 +194,8 @@ impl PostgresPersistence {
     }
 
     fn create_pool(url: &str) -> anyhow::Result<ConvexPgPool> {
-        let pg_config = tokio_postgres::Config::from_str(url)?;
+        let mut pg_config = tokio_postgres::Config::from_str(url)?;
+        pg_config.ssl_mode(tokio_postgres::config::SslMode::Disable);
         let connector = TlsConnector::builder().build()?;
         let connector = MakeTlsConnector::new(connector);
 
